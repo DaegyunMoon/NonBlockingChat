@@ -22,8 +22,6 @@ namespace NonBlockingChatClient
                 Array.Clear(Buffer, 0, BufferSize);
             }
         }
-        delegate void AppendTextDelegate(Control ctrl, string s);
-        AppendTextDelegate textAppender = null;
         Socket clientSocket = null;
 
         public ChatClient()
@@ -32,14 +30,8 @@ namespace NonBlockingChatClient
         }
         void AppendText(Control ctrl, string s)
         {
-            if (textAppender == null) textAppender = new AppendTextDelegate(AppendText);
-
-            if (ctrl.InvokeRequired) ctrl.Invoke(textAppender, ctrl, s);
-            else
-            {
-                string source = ctrl.Text;
-                ctrl.Text = source + s + Environment.NewLine;
-            }
+            string source = ctrl.Text;
+            ctrl.Text = source + s + Environment.NewLine;
         }
 
         private void IntegerFiltering(object sender, KeyPressEventArgs e)
@@ -90,6 +82,7 @@ namespace NonBlockingChatClient
                     return;
                 }
                 clientSocket.BeginConnect(inputAddr.Text, port, ConnectCallback, clientSocket);
+                AppendText(outputMsg, string.Format("{0}에 연결중...", inputAddr.Text));
             }
             catch (Exception exception)
             {
@@ -110,24 +103,15 @@ namespace NonBlockingChatClient
         {
             AsyncObject asyncObject = (AsyncObject)ar.AsyncState;
             int recvBytes = 0;
-
             try
             {
                 recvBytes = asyncObject.WorkingSocket.EndReceive(ar);
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message);
-                return;
-            }
-            if (recvBytes > 0)
-            {
-                Byte[] msgByte = new Byte[recvBytes];
-                Array.Copy(asyncObject.Buffer, msgByte, recvBytes);
-                AppendText(outputMsg, string.Format("받음: {0}", Encoding.Unicode.GetString(msgByte)));
-            }
-            try
-            {
+                if (recvBytes > 0)
+                {
+                    Byte[] msgByte = new Byte[recvBytes];
+                    Array.Copy(asyncObject.Buffer, msgByte, recvBytes);
+                    AppendText(outputMsg, string.Format("받음: {0}", Encoding.Unicode.GetString(msgByte)));
+                }
                 asyncObject.ClearBuffer();
                 asyncObject.WorkingSocket.BeginReceive(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, ReceiveHandler, asyncObject);
             }
@@ -141,7 +125,6 @@ namespace NonBlockingChatClient
         {
             AsyncObject asyncObject = new AsyncObject(1);
             asyncObject.Buffer = Encoding.Unicode.GetBytes(inputMsg.Text);
-
             asyncObject.WorkingSocket = clientSocket;
             try
             {
@@ -156,14 +139,13 @@ namespace NonBlockingChatClient
         {
             AsyncObject asyncObject = (AsyncObject)ar.AsyncState;
             int sentBytes;
-
             try
             {
                 sentBytes = asyncObject.WorkingSocket.EndSend(ar);
             }
             catch (Exception exception)
             {
-                AppendText(outputMsg, string.Format("메세지가 보내지지 않았습니다. ({0})", exception.Message));
+                MessageBox.Show(string.Format("메세지 전송에 실패하였습니다. : {0}", exception.Message));
                 return;
             }
 

@@ -114,7 +114,7 @@ namespace NonBlockingChatServer
             {
                 IPEndPoint endPoint = new IPEndPoint(thisAddress, port);
                 serverSocket.Bind(endPoint);
-                serverSocket.Listen(5);
+                serverSocket.Listen(10);
                 AppendText(outputMsg, "서버가 생성되었습니다.");
                 serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), null);
                 AppendText(outputMsg, "클라이언트 대기중...");
@@ -134,7 +134,7 @@ namespace NonBlockingChatServer
                 AsyncObject asyncObject = new AsyncObject(4096);
                 asyncObject.WorkingSocket = client;
                 clientSocket = client;
-                AppendText(outputMsg, string.Format("클라이언트 ({0})가 연결되었습니다.", clientSocket.RemoteEndPoint));
+                AppendText(outputMsg, string.Format("{0}가 연결되었습니다.", clientSocket.RemoteEndPoint));
                 client.BeginReceive(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, ReceiveHandler, asyncObject);
             }
             catch (Exception exception)
@@ -168,7 +168,6 @@ namespace NonBlockingChatServer
         {
             AsyncObject asyncObject = new AsyncObject(1);
             asyncObject.Buffer = Encoding.Unicode.GetBytes(inputMsg.Text);
-
             asyncObject.WorkingSocket = clientSocket;
             try
             {
@@ -183,7 +182,6 @@ namespace NonBlockingChatServer
         {
             AsyncObject asyncObject = (AsyncObject)ar.AsyncState;
             int sentBytes;
-
             try
             {
                 sentBytes = asyncObject.WorkingSocket.EndSend(ar);
