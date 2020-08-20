@@ -25,8 +25,6 @@ namespace NonBlockingChatServer
                 Array.Clear(Buffer, 0, BufferSize);
             }
         }
-        delegate void AppendTextDelegate(Control ctrl, string s);
-        AppendTextDelegate textAppender = null;
         Socket clientSocket = null;
         Socket serverSocket = null;
         IPAddress thisAddress;
@@ -34,17 +32,10 @@ namespace NonBlockingChatServer
         {
             InitializeComponent();
         }
-        void AppendText(Control ctrl, string s)
+        public void AppendText(Control ctrl, string s)
         {
-            if (ctrl.InvokeRequired)
-            {
-                ctrl.Invoke(textAppender, ctrl, s);
-            }
-            else
-            {
-                string source = ctrl.Text;
-                ctrl.Text = source + s + Environment.NewLine;
-            }
+            string source = ctrl.Text;
+            ctrl.Text = source + s + Environment.NewLine;
         }
 
         private void IntegerFiltering(object sender, KeyPressEventArgs e)
@@ -121,13 +112,11 @@ namespace NonBlockingChatServer
             }
             try
             {
-                //resetEvent.Reset();
                 IPEndPoint endPoint = new IPEndPoint(thisAddress, port);
                 serverSocket.Bind(endPoint);
                 serverSocket.Listen(5);
                 AppendText(outputMsg, "서버가 생성되었습니다.");
-                serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), serverSocket);
-                //resetEvent.WaitOne();
+                serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), null);
                 AppendText(outputMsg, "클라이언트 대기중...");
             }
             catch (Exception exception)
@@ -139,13 +128,13 @@ namespace NonBlockingChatServer
         }
         private void AcceptCallback(IAsyncResult ar)
         {
-            Socket client = serverSocket.EndAccept(ar);
-            AsyncObject asyncObject = new AsyncObject(4096);
-            asyncObject.WorkingSocket = client;
-            clientSocket = client;
-            AppendText(outputMsg, string.Format("클라이언트 ({0})가 연결되었습니다.", clientSocket.RemoteEndPoint));
             try
             {
+                Socket client = serverSocket.EndAccept(ar);
+                AsyncObject asyncObject = new AsyncObject(4096);
+                asyncObject.WorkingSocket = client;
+                clientSocket = client;
+                AppendText(outputMsg, string.Format("클라이언트 ({0})가 연결되었습니다.", clientSocket.RemoteEndPoint));
                 client.BeginReceive(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, ReceiveHandler, asyncObject);
             }
             catch (Exception exception)
