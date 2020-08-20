@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4p8n668SdgJUj1DkWembbxJqm4GygNEMqm3b6whoe+R+aUhmvf/j3UY9CFyfajQv+RPvflPy1bUJkdbRWLYfwQ==",
+  "dgSpecHash": "l2zZ7t3+id0TrIQD7COaXZ5MtWKRAMrMi/3cHqXnohm0mz+s/jGyWz/mB5RXqftsP+e9lry7su5eOfWWdOf+qA==",
   "success": true,
-  "projectFilePath": "E:\\NonBlockingChat\\NonBlockingChatServer\\NonBlockingChatServer\\NonBlockingChatServer.csproj",
+  "projectFilePath": "E:\\NonBlockingChat\\NonBlockingChat\\NonBlockingChatServer\\NonBlockingChatServer\\NonBlockingChatServer.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

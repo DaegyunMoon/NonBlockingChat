@@ -124,7 +124,7 @@ namespace NonBlockingChatServer
                 //resetEvent.Reset();
                 IPEndPoint endPoint = new IPEndPoint(thisAddress, port);
                 serverSocket.Bind(endPoint);
-                serverSocket.Listen(100);
+                serverSocket.Listen(5);
                 AppendText(outputMsg, "서버가 생성되었습니다.");
                 serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), serverSocket);
                 //resetEvent.WaitOne();
@@ -210,7 +210,7 @@ namespace NonBlockingChatServer
                 Byte[] msgByte = new Byte[sentBytes];
                 Array.Copy(asyncObject.Buffer, msgByte, sentBytes);
 
-                AppendText(outputMsg, string.Format("보냄: {0}", clientSocket.RemoteEndPoint, Encoding.Unicode.GetString(msgByte)));
+                AppendText(outputMsg, string.Format("보냄: {0}", Encoding.Unicode.GetString(msgByte)));
                 inputMsg.Clear();
             }
         }

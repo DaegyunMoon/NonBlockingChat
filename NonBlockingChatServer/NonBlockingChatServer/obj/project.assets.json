@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\NonBlockingChat\\NonBlockingChatServer\\NonBlockingChatServer\\NonBlockingChatServer.csproj",
+      "projectUniqueName": "E:\\NonBlockingChat\\NonBlockingChat\\NonBlockingChatServer\\NonBlockingChatServer\\NonBlockingChatServer.csproj",
       "projectName": "NonBlockingChatServer",
-      "projectPath": "E:\\NonBlockingChat\\NonBlockingChatServer\\NonBlockingChatServer\\NonBlockingChatServer.csproj",
+      "projectPath": "E:\\NonBlockingChat\\NonBlockingChat\\NonBlockingChatServer\\NonBlockingChatServer\\NonBlockingChatServer.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "E:\\NonBlockingChat\\NonBlockingChatServer\\NonBlockingChatServer\\obj\\",
+      "outputPath": "E:\\NonBlockingChat\\NonBlockingChat\\NonBlockingChatServer\\NonBlockingChatServer\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
