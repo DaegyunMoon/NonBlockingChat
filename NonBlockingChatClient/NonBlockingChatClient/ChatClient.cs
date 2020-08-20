@@ -30,8 +30,19 @@ namespace NonBlockingChatClient
         }
         void AppendText(Control ctrl, string s)
         {
-            string source = ctrl.Text;
-            ctrl.Text = source + s + Environment.NewLine;
+            if (ctrl.InvokeRequired)
+            {
+                ctrl.Invoke(new MethodInvoker(delegate ()
+                {
+                    string source = ctrl.Text;
+                    ctrl.Text = source + s + Environment.NewLine;
+                }));
+            }
+            else
+            {
+                string source = ctrl.Text;
+                ctrl.Text = source + s + Environment.NewLine;
+            }
         }
 
         private void IntegerFiltering(object sender, KeyPressEventArgs e)

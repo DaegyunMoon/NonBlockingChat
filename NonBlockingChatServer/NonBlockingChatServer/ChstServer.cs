@@ -34,8 +34,19 @@ namespace NonBlockingChatServer
         }
         public void AppendText(Control ctrl, string s)
         {
-            string source = ctrl.Text;
-            ctrl.Text = source + s + Environment.NewLine;
+            if (ctrl.InvokeRequired)
+            {
+                ctrl.Invoke(new MethodInvoker(delegate ()
+                {
+                    string source = ctrl.Text;
+                    ctrl.Text = source + s + Environment.NewLine;
+                }));
+            }
+            else
+            {
+                string source = ctrl.Text;
+                ctrl.Text = source + s + Environment.NewLine;
+            }
         }
 
         private void IntegerFiltering(object sender, KeyPressEventArgs e)
@@ -144,7 +155,7 @@ namespace NonBlockingChatServer
         }
         void ReceiveHandler(IAsyncResult ar)
         {
-            AsyncObject asyncObject = (AsyncObject)ar.AsyncState;
+            AsyncObject asyncObject = (AsyncObject) ar.AsyncState;
             int recvBytes = 0;
             try
             {
@@ -180,7 +191,7 @@ namespace NonBlockingChatServer
         }
         void SendHandler(IAsyncResult ar)
         {
-            AsyncObject asyncObject = (AsyncObject)ar.AsyncState;
+            AsyncObject asyncObject = (AsyncObject) ar.AsyncState;
             int sentBytes;
             try
             {

@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\NonBlockingChat\\NonBlockingChat\\NonBlockingChatClient\\NonBlockingChatClient\\NonBlockingChatClient.csproj",
+      "projectUniqueName": "E:\\Projects\\NonBlockingChat\\NonBlockingChatClient\\NonBlockingChatClient\\NonBlockingChatClient.csproj",
       "projectName": "NonBlockingChatClient",
-      "projectPath": "E:\\NonBlockingChat\\NonBlockingChat\\NonBlockingChatClient\\NonBlockingChatClient\\NonBlockingChatClient.csproj",
+      "projectPath": "E:\\Projects\\NonBlockingChat\\NonBlockingChatClient\\NonBlockingChatClient\\NonBlockingChatClient.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "E:\\NonBlockingChat\\NonBlockingChat\\NonBlockingChatClient\\NonBlockingChatClient\\obj\\",
+      "outputPath": "E:\\Projects\\NonBlockingChat\\NonBlockingChatClient\\NonBlockingChatClient\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
