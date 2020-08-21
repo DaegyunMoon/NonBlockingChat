@@ -97,18 +97,25 @@ namespace NonBlockingChatClient
             }
             catch (Exception exception)
             {
-                MessageBox.Show("연결에 실패하였습니다 : " + exception.Message);
+                MessageBox.Show("연결에 실패하였습니다.\n" + exception.Message);
                 return;
             }
         }
         void ConnectCallback(IAsyncResult ar)
         {
-            Socket client = (Socket)ar.AsyncState;
-            client.EndConnect(ar);
-            AsyncObject asyncObject = new AsyncObject(4096);
-            asyncObject.WorkingSocket = client;
-            clientSocket.BeginReceive(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, ReceiveHandler, asyncObject);
-            AppendText(outputMsg, string.Format("{0}에 연결되었습니다.", inputAddr.Text.ToString()));
+            try
+            {
+                Socket client = (Socket)ar.AsyncState;
+                client.EndConnect(ar);
+                AsyncObject asyncObject = new AsyncObject(4096);
+                asyncObject.WorkingSocket = client;
+                clientSocket.BeginReceive(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, ReceiveHandler, asyncObject);
+                AppendText(outputMsg, string.Format("{0}에 연결되었습니다.", inputAddr.Text.ToString()));
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("Connect 중 문제가 발생하였습니다.\n" + exception.Message);
+            }
         }
         void ReceiveHandler(IAsyncResult ar)
         {
@@ -128,7 +135,7 @@ namespace NonBlockingChatClient
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message);
+                MessageBox.Show("Receive 중 문제가 발생하였습니다.\n" + exception.Message);
                 return;
             }
         }
@@ -143,7 +150,7 @@ namespace NonBlockingChatClient
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message);
+                MessageBox.Show("전송에 실패하였습니다.\n" + exception.Message);
             }
         }
         void SendHandler(IAsyncResult ar)
@@ -156,7 +163,7 @@ namespace NonBlockingChatClient
             }
             catch (Exception exception)
             {
-                MessageBox.Show(string.Format("메세지 전송에 실패하였습니다. : {0}", exception.Message));
+                MessageBox.Show(string.Format("메세지 전송에 실패하였습니다.\n" + exception.Message));
                 return;
             }
 

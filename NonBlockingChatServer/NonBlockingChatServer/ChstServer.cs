@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace NonBlockingChatServer
 {
@@ -25,6 +26,7 @@ namespace NonBlockingChatServer
                 Array.Clear(Buffer, 0, BufferSize);
             }
         }
+        List<Socket> clients = new List<Socket>();
         Socket clientSocket = null;
         Socket serverSocket = null;
         IPAddress thisAddress;
@@ -85,7 +87,7 @@ namespace NonBlockingChatServer
 
         private void OnSend(object sender, EventArgs e)
         {
-            SendMessage();
+            //SendMessage();
         }
         private void OnKeyPress(object sender, KeyPressEventArgs e)
         {
@@ -97,7 +99,7 @@ namespace NonBlockingChatServer
                 }
                 else if (sender == inputMsg)
                 {
-                    SendMessage();
+                    //SendMessage();
                 }
             }
             else if (sender == inputPort)
@@ -112,7 +114,6 @@ namespace NonBlockingChatServer
                 MessageBox.Show("서버가 이미 실행중입니다!");
                 return;
             }
-            serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
             int port;
             if (!int.TryParse(inputPort.Text, out port))
             {
@@ -123,6 +124,7 @@ namespace NonBlockingChatServer
             }
             try
             {
+                serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
                 IPEndPoint endPoint = new IPEndPoint(thisAddress, port);
                 serverSocket.Bind(endPoint);
                 serverSocket.Listen(10);
@@ -132,7 +134,7 @@ namespace NonBlockingChatServer
             }
             catch (Exception exception)
             {
-                MessageBox.Show("서버 생성 중 문제가 발생하였습니다. : " + exception.Message);
+                MessageBox.Show("서버 생성 중 문제가 발생하였습니다.\n" + exception.Message);
                 serverSocket = null;
                 return;
             }
@@ -144,13 +146,21 @@ namespace NonBlockingChatServer
                 Socket client = serverSocket.EndAccept(ar);
                 AsyncObject asyncObject = new AsyncObject(4096);
                 asyncObject.WorkingSocket = client;
-                clientSocket = client;
-                AppendText(outputMsg, string.Format("{0}가 연결되었습니다.", clientSocket.RemoteEndPoint));
+                clients.Add(client);
+                AppendText(outputMsg, string.Format("{0}와 연결되었습니다.", client.RemoteEndPoint));
+                if(clients.Count < 2)
+                {
+                    serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), null);
+                }
+                else
+                {
+                    AppendText(outputMsg, "모든 클라이언트가 입장하였습니다.");
+                }
                 client.BeginReceive(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, ReceiveHandler, asyncObject);
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message);
+                MessageBox.Show("Accept 중 문제가 발생하였습니다.\n" + exception.Message);
             }
         }
         void ReceiveHandler(IAsyncResult ar)
@@ -171,10 +181,11 @@ namespace NonBlockingChatServer
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message);
+                MessageBox.Show("Receive 중 문제가 발생하였습니다.\n" + exception.Message);
                 return;
             }
         }
+        /*
         private void SendMessage()
         {
             AsyncObject asyncObject = new AsyncObject(1);
@@ -186,7 +197,7 @@ namespace NonBlockingChatServer
             }
             catch (Exception exception)
             {
-                MessageBox.Show("전송에 실패하였습니다. : {0}", exception.Message);
+                MessageBox.Show("전송에 실패하였습니다.\n" + exception.Message);
             }
         }
         void SendHandler(IAsyncResult ar)
@@ -199,7 +210,7 @@ namespace NonBlockingChatServer
             }
             catch (Exception exception)
             {
-                AppendText(outputMsg, string.Format("메세지 전송에 실패하였습니다. : ({0})", exception.Message));
+                AppendText(outputMsg, string.Format("메세지 전송에 실패하였습니다.\n" + exception.Message));
                 return;
             }
 
@@ -212,5 +223,6 @@ namespace NonBlockingChatServer
                 inputMsg.Clear();
             }
         }
+        */
     }
 }
