@@ -33,8 +33,6 @@
             this.labelPort = new System.Windows.Forms.Label();
             this.inputPort = new System.Windows.Forms.TextBox();
             this.btnConnect = new System.Windows.Forms.Button();
-            this.inputMsg = new System.Windows.Forms.TextBox();
-            this.btnSendMsg = new System.Windows.Forms.Button();
             this.outputMsg = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
@@ -86,26 +84,6 @@
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.OnStart);
             // 
-            // inputMsg
-            // 
-            this.inputMsg.Location = new System.Drawing.Point(11, 314);
-            this.inputMsg.Margin = new System.Windows.Forms.Padding(2);
-            this.inputMsg.Name = "inputMsg";
-            this.inputMsg.Size = new System.Drawing.Size(324, 23);
-            this.inputMsg.TabIndex = 5;
-            this.inputMsg.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnKeyPress);
-            // 
-            // btnSendMsg
-            // 
-            this.btnSendMsg.Location = new System.Drawing.Point(339, 314);
-            this.btnSendMsg.Margin = new System.Windows.Forms.Padding(2);
-            this.btnSendMsg.Name = "btnSendMsg";
-            this.btnSendMsg.Size = new System.Drawing.Size(73, 22);
-            this.btnSendMsg.TabIndex = 6;
-            this.btnSendMsg.Text = "전송";
-            this.btnSendMsg.UseVisualStyleBackColor = true;
-            this.btnSendMsg.Click += new System.EventHandler(this.OnSend);
-            // 
             // outputMsg
             // 
             this.outputMsg.BackColor = System.Drawing.SystemColors.ControlLightLight;
@@ -114,7 +92,7 @@
             this.outputMsg.Multiline = true;
             this.outputMsg.Name = "outputMsg";
             this.outputMsg.ReadOnly = true;
-            this.outputMsg.Size = new System.Drawing.Size(402, 265);
+            this.outputMsg.Size = new System.Drawing.Size(402, 296);
             this.outputMsg.TabIndex = 7;
             // 
             // ChatServer
@@ -123,8 +101,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(419, 347);
             this.Controls.Add(this.outputMsg);
-            this.Controls.Add(this.btnSendMsg);
-            this.Controls.Add(this.inputMsg);
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.inputPort);
             this.Controls.Add(this.labelPort);
@@ -146,8 +122,6 @@
         private System.Windows.Forms.Label labelPort;
         private System.Windows.Forms.TextBox inputPort;
         private System.Windows.Forms.Button btnConnect;
-        private System.Windows.Forms.TextBox inputMsg;
-        private System.Windows.Forms.Button btnSendMsg;
         private System.Windows.Forms.TextBox outputMsg;
     }
 }

@@ -83,27 +83,18 @@ namespace NonBlockingChatServer
         {
             StartServer();
         }
-
-        private void OnSend(object sender, EventArgs e)
-        {
-            //SendMessage();
-        }
         private void OnKeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)13)
+            if(sender == inputPort)
             {
-                if (sender == inputPort)
+                if (e.KeyChar == (char)13)
                 {
                     StartServer();
                 }
-                else if (sender == inputMsg)
+                else
                 {
-                    //SendMessage();
+                    IntegerFiltering(sender, e);
                 }
-            }
-            else if (sender == inputPort)
-            {
-                IntegerFiltering(sender, e);
             }
         }
         private void StartServer()
