@@ -22,7 +22,7 @@ namespace NonBlockingChatClient
                 Array.Clear(Buffer, 0, BufferSize);
             }
         }
-        Socket clientSocket = null;
+        Socket mainSocket = null;
 
         public ChatClient()
         {
@@ -81,7 +81,7 @@ namespace NonBlockingChatClient
         }
         private void ConnectToServer()
         {
-            clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+            mainSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
             try
             {
                 int port;
@@ -92,7 +92,7 @@ namespace NonBlockingChatClient
                     inputPort.SelectAll();
                     return;
                 }
-                clientSocket.BeginConnect(inputAddr.Text, port, ConnectCallback, clientSocket);
+                mainSocket.BeginConnect(inputAddr.Text, port, ConnectCallback, mainSocket);
                 AppendText(outputMsg, string.Format("{0}에 연결중...", inputAddr.Text));
             }
             catch (Exception exception)
@@ -109,7 +109,7 @@ namespace NonBlockingChatClient
                 client.EndConnect(ar);
                 AsyncObject asyncObject = new AsyncObject(4096);
                 asyncObject.WorkingSocket = client;
-                clientSocket.BeginReceive(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, ReceiveHandler, asyncObject);
+                mainSocket.BeginReceive(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, ReceiveHandler, asyncObject);
                 AppendText(outputMsg, string.Format("{0}에 연결되었습니다.", inputAddr.Text.ToString()));
             }
             catch (Exception exception)
@@ -141,12 +141,12 @@ namespace NonBlockingChatClient
         }
         private void SendMessage()
         {
-            AsyncObject asyncObject = new AsyncObject(1);
+            AsyncObject asyncObject = new AsyncObject(4096);
             asyncObject.Buffer = Encoding.Unicode.GetBytes(inputMsg.Text);
-            asyncObject.WorkingSocket = clientSocket;
+            asyncObject.WorkingSocket = mainSocket;
             try
             {
-                clientSocket.BeginSend(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, SendHandler, asyncObject);
+                mainSocket.BeginSend(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, SendHandler, asyncObject);
             }
             catch (Exception exception)
             {

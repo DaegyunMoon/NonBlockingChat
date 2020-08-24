@@ -27,7 +27,6 @@ namespace NonBlockingChatServer
             }
         }
         List<Socket> clients = new List<Socket>();
-        Socket clientSocket = null;
         Socket serverSocket = null;
         IPAddress thisAddress;
         public ChatServer()
@@ -174,7 +173,15 @@ namespace NonBlockingChatServer
                 {
                     Byte[] msgByte = new Byte[recvBytes];
                     Array.Copy(asyncObject.Buffer, msgByte, recvBytes);
-                    AppendText(outputMsg, string.Format("받음: {0}", Encoding.Unicode.GetString(msgByte)));
+                    AppendText(outputMsg, string.Format("{0} : {1}", asyncObject.WorkingSocket.RemoteEndPoint, Encoding.Unicode.GetString(msgByte)));
+                    foreach(Socket socket in clients)
+                    {
+                        if(socket != asyncObject.WorkingSocket)
+                        {
+                            socket.Send(msgByte);
+                            //socket.BeginSend(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, SendHandler, asyncObject);
+                        }
+                    }
                 }
                 asyncObject.ClearBuffer();
                 asyncObject.WorkingSocket.BeginReceive(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, ReceiveHandler, asyncObject);
@@ -183,21 +190,6 @@ namespace NonBlockingChatServer
             {
                 MessageBox.Show("Receive 중 문제가 발생하였습니다.\n" + exception.Message);
                 return;
-            }
-        }
-        /*
-        private void SendMessage()
-        {
-            AsyncObject asyncObject = new AsyncObject(1);
-            asyncObject.Buffer = Encoding.Unicode.GetBytes(inputMsg.Text);
-            asyncObject.WorkingSocket = clientSocket;
-            try
-            {
-                clientSocket.BeginSend(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, SendHandler, asyncObject);
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("전송에 실패하였습니다.\n" + exception.Message);
             }
         }
         void SendHandler(IAsyncResult ar)
@@ -213,16 +205,7 @@ namespace NonBlockingChatServer
                 AppendText(outputMsg, string.Format("메세지 전송에 실패하였습니다.\n" + exception.Message));
                 return;
             }
-
-            if (sentBytes > 0)
-            {
-                Byte[] msgByte = new Byte[sentBytes];
-                Array.Copy(asyncObject.Buffer, msgByte, sentBytes);
-
-                AppendText(outputMsg, string.Format("보냄: {0}", Encoding.Unicode.GetString(msgByte)));
-                inputMsg.Clear();
-            }
         }
-        */
+        
     }
 }
