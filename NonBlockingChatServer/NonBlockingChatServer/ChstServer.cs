@@ -170,7 +170,6 @@ namespace NonBlockingChatServer
                         if(socket != asyncObject.WorkingSocket)
                         {
                             socket.Send(msgByte);
-                            //socket.BeginSend(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, SendHandler, asyncObject);
                         }
                     }
                 }
@@ -200,20 +199,5 @@ namespace NonBlockingChatServer
                 }
             }
         }
-        void SendHandler(IAsyncResult ar)
-        {
-            AsyncObject asyncObject = (AsyncObject) ar.AsyncState;
-            int sentBytes;
-            try
-            {
-                sentBytes = asyncObject.WorkingSocket.EndSend(ar);
-            }
-            catch (Exception exception)
-            {
-                AppendText(outputMsg, string.Format("메세지 전송에 실패하였습니다.\n" + exception.Message));
-                return;
-            }
-        }
-        
     }
 }

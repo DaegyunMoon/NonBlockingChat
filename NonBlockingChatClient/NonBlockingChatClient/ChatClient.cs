@@ -44,7 +44,6 @@ namespace NonBlockingChatClient
                 ctrl.Text = source + s + Environment.NewLine;
             }
         }
-
         private void IntegerFiltering(object sender, KeyPressEventArgs e)
         {
             e.Handled = !(char.IsControl(e.KeyChar) || char.IsDigit(e.KeyChar));
@@ -166,7 +165,6 @@ namespace NonBlockingChatClient
                 MessageBox.Show(string.Format("메세지 전송에 실패하였습니다.\n" + exception.Message));
                 return;
             }
-
             if (sentBytes > 0)
             {
                 Byte[] msgByte = new Byte[sentBytes];
