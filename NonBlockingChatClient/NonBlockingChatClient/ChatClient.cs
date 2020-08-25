@@ -25,7 +25,7 @@ namespace NonBlockingChatClient
         Socket mainSocket = null;
 
         public ChatClient()
-        {
+        { 
             InitializeComponent();
         }
         void AppendText(Control ctrl, string s)

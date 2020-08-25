@@ -58,3 +58,4 @@ E:\Projects\NonBlockingChat\NonBlockingChatServer\NonBlockingChatServer\obj\Debu
 E:\Projects\NonBlockingChat\NonBlockingChatServer\NonBlockingChatServer\obj\Debug\netcoreapp3.1\NonBlockingChatServer.dll
 E:\Projects\NonBlockingChat\NonBlockingChatServer\NonBlockingChatServer\obj\Debug\netcoreapp3.1\NonBlockingChatServer.pdb
 E:\Projects\NonBlockingChat\NonBlockingChatServer\NonBlockingChatServer\obj\Debug\netcoreapp3.1\NonBlockingChatServer.genruntimeconfig.cache
+E:\Projects\NonBlockingChat\NonBlockingChatServer\NonBlockingChatServer\obj\Debug\netcoreapp3.1\NonBlockingChatServer.SettingForm.resources

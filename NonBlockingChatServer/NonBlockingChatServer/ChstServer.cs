@@ -29,9 +29,11 @@ namespace NonBlockingChatServer
         List<Socket> clients = new List<Socket>();
         Socket serverSocket = null;
         IPAddress thisAddress;
+        int maxClients;
         public ChatServer()
         {
             InitializeComponent();
+            maxClients = 2;
         }
         public void AppendText(Control ctrl, string s)
         {
@@ -138,7 +140,7 @@ namespace NonBlockingChatServer
                 asyncObject.WorkingSocket = client;
                 clients.Add(client);
                 AppendText(outputMsg, string.Format("{0}와 연결되었습니다.", client.RemoteEndPoint));
-                if(clients.Count < 2)
+                if(clients.Count < maxClients)
                 {
                     serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), null);
                 }
@@ -165,11 +167,11 @@ namespace NonBlockingChatServer
                     Byte[] msgByte = new Byte[recvBytes];
                     Array.Copy(asyncObject.Buffer, msgByte, recvBytes);
                     AppendText(outputMsg, string.Format("{0} : {1}", asyncObject.WorkingSocket.RemoteEndPoint, Encoding.Unicode.GetString(msgByte)));
-                    foreach(Socket socket in clients)
+                    foreach(Socket client in clients)
                     {
-                        if(socket != asyncObject.WorkingSocket)
+                        if(client != asyncObject.WorkingSocket)
                         {
-                            socket.Send(msgByte);
+                            client.Send(msgByte);
                         }
                     }
                 }
