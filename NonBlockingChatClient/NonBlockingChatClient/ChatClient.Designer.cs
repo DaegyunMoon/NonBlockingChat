@@ -131,8 +131,12 @@
             this.Controls.Add(this.labelPort);
             this.Controls.Add(this.inputAddr);
             this.Controls.Add(this.labelAddr);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ChatClient";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Chat_Client";
             this.ResumeLayout(false);
             this.PerformLayout();
