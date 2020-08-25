@@ -177,10 +177,27 @@ namespace NonBlockingChatServer
                 asyncObject.ClearBuffer();
                 asyncObject.WorkingSocket.BeginReceive(asyncObject.Buffer, 0, asyncObject.Buffer.Length, SocketFlags.None, ReceiveHandler, asyncObject);
             }
-            catch (Exception exception)
+            catch (SocketException exception)
             {
-                MessageBox.Show("Receive 중 문제가 발생하였습니다.\n" + exception.Message);
-                return;
+                if (exception.ErrorCode == 10054)
+                {
+                    AppendText(outputMsg, string.Format("{0}와의 연결이 끊겼습니다.", asyncObject.WorkingSocket.RemoteEndPoint));
+                    foreach (Socket client in clients)
+                    {
+                        if (client == asyncObject.WorkingSocket)
+                        {
+                            clients.Remove(client);
+                            break;
+                        }
+                    }
+                    serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), null);
+                    AppendText(outputMsg, "다른 클라이언트를 기다립니다.");
+                }
+                else
+                {
+                    AppendText(outputMsg, string.Format("수신에 실패하였습니다.\n{0}", exception.Message));
+                    return;
+                }
             }
         }
         void SendHandler(IAsyncResult ar)
